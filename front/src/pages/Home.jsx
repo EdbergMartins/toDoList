@@ -1,11 +1,46 @@
 import { Button, Paper } from '@mui/material';
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import './Home.css';
 
 const Home = () => {
-  const [pendingItens, setPendingItens] = useState(['Item 1', 'Item 2', 'Item 3', 'Item 1', 'Item 2', 'Item 3',]);
+  const [pendingItens, setPendingItens] = useState([]);
   const [doingItens, setDoingItens] = useState([]);
   const [doneItens, setDoneItens] = useState([])
+  const [data, setData] = useState(null)
+
+  useEffect(() => {
+    if (data === null) {
+      axios.get('http://localhost:3333/tasks')
+        .then((response) => {
+          setData(response.data);
+          const pendingList = []
+          const doingList = []
+          const doneList = []
+          for (let i = 0; i < response.data.length; i++) {
+            switch (response.data[i].status) {
+              case "Pendente":
+                pendingList.push(response.data[i])
+                break;
+              case 'Em Andamento':
+                doingList.push(response.data[i])
+                break;
+              case 'Concluída':
+                doneList.push(response.data[i])
+                break;
+              default:
+                break;
+            }
+          }
+          setPendingItens(pendingList)
+          setDoingItens(doingList)
+          setDoneItens(doneList)
+        })
+        .catch((error) => {
+          console.error('Erro:', error);
+        });
+    }
+  }, [data]);
 
   const moveToDoingItens = (item) => {
     setPendingItens(pendingItens.filter((i) => i !== item));
@@ -35,7 +70,7 @@ const Home = () => {
         <ul>
           {pendingItens.map((item, index) => (
             <li key={index}>
-              {item}
+              {item.title}
               <Button onClick={() => moveToDoingItens(item)}>Move Right</Button>
             </li>
           ))}
