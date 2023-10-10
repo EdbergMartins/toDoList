@@ -1,4 +1,26 @@
 .home {
-  text-align: center;
-
-}
+  display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .Paper {
+    width: 90%;
+    margin: 0px 10px
+  }
+  
+  .Paper h2 {
+    text-align: center
+  }
+  
+  @media (max-width: 600px) {
+    .home {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  
+    .Paper {
+      margin: 10px 0px
+    }
+  
+  }
