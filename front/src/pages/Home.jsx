@@ -43,30 +43,62 @@ const Home = () => {
   }, [data]);
 
   const moveToDoingItens = (item) => {
-    setPendingItens(pendingItens.filter((i) => i !== item));
-    setDoingItens([...doingItens, item]);
+    const newItem = item
+    newItem.status = 'Em Andamento'
+    axios.patch('http://localhost:3333/tasks', newItem)
+      .then((response) => {
+        setPendingItens(pendingItens.filter((i) => i !== item));
+        setDoingItens([...doingItens, item]);
+      })
+      .catch((error) => {
+        console.error('Erro:', error);
+      })
   };
 
   const returnToDoItens = (item) => {
-    setDoingItens(doingItens.filter((i) => i !== item));
-    setPendingItens([...pendingItens, item]);
+    const newItem = item
+    newItem.status = 'Pendente'
+    axios.patch('http://localhost:3333/tasks', newItem)
+      .then((response) => {
+        setDoingItens(doingItens.filter((i) => i !== item));
+        setPendingItens([...pendingItens, item]);
+      })
+      .catch((error) => {
+        console.error('Erro:', error);
+      })
   };
 
   const moveToDoneItens = (item) => {
-    setDoingItens(doingItens.filter((i) => i !== item))
-    setDoneItens([...doneItens, item]);
+    const newItem = item
+    newItem.status = 'Concluída'
+    axios.patch('http://localhost:3333/tasks', newItem)
+      .then((response) => {
+        setDoingItens(doingItens.filter((i) => i !== item))
+        setDoneItens([...doneItens, item]);
+      })
+      .catch((error) => {
+        console.error('Erro:', error);
+      })
   }
 
   const returnToDoingItens = (item) => {
-    setDoneItens(doneItens.filter((i) => i !== item))
-    setDoingItens([...doingItens, item])
+    const newItem = item
+    newItem.status = 'Em Andamento'
+    axios.patch('http://localhost:3333/tasks', newItem)
+      .then((response) => {
+        setDoneItens(doneItens.filter((i) => i !== item))
+        setDoingItens([...doingItens, item])
+      })
+      .catch((error) => {
+        console.error('Erro:', error);
+      })
   }
 
 
   return (
     <div className='home'>
       <Paper className='Paper' elevation={3}>
-        <h2>A iniciar</h2>
+        <h2>A iniciar ({pendingItens.length})</h2>
         <ul>
           {pendingItens.map((item, index) => (
             <li key={index}>
@@ -77,11 +109,11 @@ const Home = () => {
         </ul>
       </Paper>
       <Paper className='Paper' elevation={3}>
-        <h2>Em Andamento</h2>
+        <h2>Em Andamento ({doingItens.length})</h2>
         <ul>
           {doingItens.map((item, index) => (
             <li key={index}>
-              {item}
+              {item.title}
               <Button onClick={() => returnToDoItens(item)}>Retornar</Button>
               <Button onClick={() => moveToDoneItens(item)}>Avançar</Button>
             </li>
@@ -89,11 +121,11 @@ const Home = () => {
         </ul>
       </Paper>
       <Paper className='Paper' elevation={3}>
-        <h2>Concluidas</h2>
+        <h2>Concluidas ({doneItens.length})</h2>
         <ul>
           {doneItens.map((item, index) => (
             <li key={index}>
-              {item}
+              {item.title}
               <Button onClick={() => returnToDoingItens(item)}>Retornar</Button>
             </li>
           ))}
