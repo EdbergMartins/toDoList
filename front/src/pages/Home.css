@@ -4,6 +4,20 @@ display: flex;
   justify-content: space-between;
 }
 
+li {
+  list-style-type: none;
+}
+
+.listPapers {
+  display: flex;
+  justify-content: space-between;
+  white-space: nowrap;
+}
+
+.textTitle {
+  width: 150px;
+  overflow: hidden;
+}
 .Paper {
   width: 90%;
   margin: 0px 10px
@@ -21,15 +35,14 @@ display: flex;
   text-align: center;
   margin: 10px 10px;
 }
-
-.buttonAdd root {
-  color: black;
+.btn {
+  margin-left: 100px;
 }
-@media (max-width: 600px) {
+@media (max-width: 859px) {
   .home {
     display: flex;
     flex-wrap: wrap;
-justify-content: center;
+    justify-content: center;
 }
 .addButton {
   display: flex;
@@ -41,10 +54,16 @@ justify-content: center;
   margin: 0px 10px
 }
 
+.descriptionField {
+  background-color: #000;
+}
 .addButton span {
   margin: 0px 10px
 }
 .Paper {
   margin: 10px 0px
+}
+.textTitle {
+  width: 100%;
 }
 }

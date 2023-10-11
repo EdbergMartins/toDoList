@@ -1,12 +1,12 @@
+import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
+import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
 import { LoadingButton } from '@mui/lab';
 import { Box, Button, Modal, Paper, TextField } from '@mui/material';
-import { wait } from '@testing-library/user-event/dist/utils';
 import axios from 'axios';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import './Home.css';
-
 
 const Home = () => {
   const [pendingItens, setPendingItens] = useState([]);
@@ -17,6 +17,7 @@ const Home = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [loadingButton, setLoadingButton] = useState(false)
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   const style = {
     position: 'absolute',
@@ -24,12 +25,19 @@ const Home = () => {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: '80%',
-    height: '80%',
+    height: '50%',
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
   };
+
+  const handleResize = () => {
+    // Aquí puedes realizar acciones cuando la pantalla cambie de tamaño
+    setScreenWidth(window.innerWidth)
+  }
+  window.addEventListener('resize', handleResize);
+
 
   const validationSchema = Yup.object({
     title: Yup.string().required('O titulo é obrigatória'),
@@ -133,19 +141,13 @@ const Home = () => {
       })
   }
 
-  const printValues = (values) => {
-    console.log(1)
-  }
-
-
   return (
     <>
       <Button
-        className='buttonAdd'
+        style={screenWidth > 859 ? { margin: '10px' } : { margin: '30px' }}
         color='primary'
-        variant="outlined"
+        variant="contained"
         onClick={handleOpen}
-
       >
         Adicionar Task
       </Button>
@@ -165,13 +167,21 @@ const Home = () => {
             }}
           >
             {formik => (
-              <Form>
-                <Field type="text" name="title" label="Titulo" as={TextField} />
-                <ErrorMessage name="title" component="div" />
-                <Field type="text" name="description" label="Description" as={TextField} />
-                <ErrorMessage name="description" component="div" />
-                <LoadingButton loading={loadingButton} type="submit" variant="contained" color="primary">Criar Task</LoadingButton>
+              <Form style={{ display: 'flex', flexDirection: 'column' }}>
+                <Field style={{ margin: '10px' }} type="text" name="title" label="Titulo" as={TextField} />
+                <ErrorMessage style={{ 'margin-left': '10px', 'color': 'red' }} name="title" component="div" />
+                <TextField
+                  style={{ margin: '10px' }}
+                  type="text"
+                  id="outlined-textarea"
+                  name="description"
+                  label="Description"
+                  placeholder="Descrição"
+                  multiline
+                />
+                <LoadingButton style={{ margin: '10px' }} loading={loadingButton} type="submit" variant="contained" color="primary">Criar Task</LoadingButton>
               </Form>
+
             )}
           </Formik>  
         </Box>
@@ -186,8 +196,12 @@ const Home = () => {
           <ul>
             {pendingItens.map((item, index) => (
               <li key={index}>
-                {item.title}
-                <Button onClick={() => moveToDoingItens(item)}>Move Right</Button>
+                <div className='listPapers'>
+                  <span className='textTitle'>
+                    {item.title}
+                  </span>
+                  <Button onClick={() => moveToDoingItens(item)}><ArrowCircleRightOutlinedIcon /></Button>
+                </div>
               </li>
             ))}
           </ul>
@@ -197,9 +211,13 @@ const Home = () => {
           <ul>
             {doingItens.map((item, index) => (
               <li key={index}>
-                {item.title}
-                <Button onClick={() => returnToDoItens(item)}>Retornar</Button>
-                <Button onClick={() => moveToDoneItens(item)}>Avançar</Button>
+                <div className='listPapers'>
+                  {item.title}
+                  <div>
+                    <Button style={{ width: '5px' }} onClick={() => returnToDoItens(item)}><ArrowCircleLeftOutlinedIcon /></Button>
+                    <Button onClick={() => moveToDoneItens(item)}><ArrowCircleRightOutlinedIcon /></Button>
+                  </div>
+                </div>
               </li>
             ))}
           </ul>
@@ -209,8 +227,12 @@ const Home = () => {
           <ul>
             {doneItens.map((item, index) => (
               <li key={index}>
-                {item.title}
-                <Button onClick={() => returnToDoingItens(item)}>Retornar</Button>
+                <div className='listPapers'>
+                  <span className='textTitle'>
+                    {item.title}
+                  </span>
+                  <Button onClick={() => returnToDoingItens(item)}><ArrowCircleLeftOutlinedIcon /></Button>
+                </div>
               </li>
             ))}
           </ul>
