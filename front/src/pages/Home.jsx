@@ -1,25 +1,51 @@
-import { Box, Button, Modal, Paper, Typography } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { Box, Button, Modal, Paper, TextField } from '@mui/material';
+import { wait } from '@testing-library/user-event/dist/utils';
 import axios from 'axios';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
+import * as Yup from 'yup';
 import './Home.css';
+
 
 const Home = () => {
   const [pendingItens, setPendingItens] = useState([]);
   const [doingItens, setDoingItens] = useState([]);
   const [doneItens, setDoneItens] = useState([])
   const [data, setData] = useState(null)
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [loadingButton, setLoadingButton] = useState(false)
 
   const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: '80%',
+    height: '80%',
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
   };
+
+  const validationSchema = Yup.object({
+    title: Yup.string().required('O titulo é obrigatória'),
+  });
+
+  const sendForm = (from) => {
+    axios.post('http://localhost:3333/tasks', from)
+      .then((response) => {
+        setPendingItens([...pendingItens, from]);
+        handleClose()
+        setLoadingButton(false)
+      })
+      .catch((error) => {
+        console.error('Erro:', error);
+      })
+  }
 
 
   useEffect(() => {
@@ -107,9 +133,10 @@ const Home = () => {
       })
   }
 
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const printValues = (values) => {
+    console.log(1)
+  }
+
 
   return (
     <>
@@ -129,14 +156,26 @@ const Home = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style} >
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
+          <Formik
+            initialValues={{ title: '', description: '' }}
+            validationSchema={validationSchema}
+            onSubmit={(values) => {
+              setLoadingButton(true)
+              sendForm(values)
+            }}
+          >
+            {formik => (
+              <Form>
+                <Field type="text" name="title" label="Titulo" as={TextField} />
+                <ErrorMessage name="title" component="div" />
+                <Field type="text" name="description" label="Description" as={TextField} />
+                <ErrorMessage name="description" component="div" />
+                <LoadingButton loading={loadingButton} type="submit" variant="contained" color="primary">Criar Task</LoadingButton>
+              </Form>
+            )}
+          </Formik>  
         </Box>
-      </Modal>`
+      </Modal>
       <div className='home'>
         <Paper className='Paper' elevation={3}>
           <div className='headerPaper'>
