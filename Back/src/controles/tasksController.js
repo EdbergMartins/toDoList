@@ -19,8 +19,14 @@ const deleteTask = async (rec, res) => {
   return res.status('200').json({menssage: 'Task deleted succefully'})
 }
 
+const atualizeStatusTask = async (rec, res) => {
+  const atualizeStatusTask = await tasksModule.atualizeStatusTask(rec);
+  return res.status('200').json({ message: 'Task ataulized' });
+}
+
 module.exports = {
   getAll,
   createTask,
-  deleteTask
+  deleteTask,
+  atualizeStatusTask
 }
