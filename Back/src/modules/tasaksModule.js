@@ -10,7 +10,8 @@ const createTask = async (task) => {
   const createdDateUtc = new Date(Date.now()).toUTCString()
   const query = 'INSERT INTO  tasks(title,status,created_at) VALUES(?,?,?)';
   const [createTask] = await connection.execute(query, [title, 'Pendente', createdDateUtc]);
-  return {insertId:  createTask.insertId};
+  const [itemCreated] = await connection.execute('SELECT * FROM tasks ORDER BY id DESC LIMIT 1;')
+  return { itemCreated };
 }
 
 const deleteTask = async (task) => {
