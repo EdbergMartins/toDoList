@@ -1,26 +1,50 @@
 .home {
+display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.Paper {
+  width: 90%;
+  margin: 0px 10px
+}
+
+.Paper h2 {
+  text-align: center
+}
+.headerPaper {
+  text-align: center;
+}
+
+.divButton {
   display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-  
-  .Paper {
-    width: 90%;
-    margin: 0px 10px
-  }
-  
-  .Paper h2 {
-    text-align: center
-  }
-  
-  @media (max-width: 600px) {
-    .home {
-      display: flex;
-      flex-wrap: wrap;
-    }
-  
-    .Paper {
-      margin: 10px 0px
-    }
-  
-  }
+  text-align: center;
+  margin: 10px 10px;
+}
+
+.buttonAdd root {
+  color: black;
+}
+@media (max-width: 600px) {
+  .home {
+    display: flex;
+    flex-wrap: wrap;
+justify-content: center;
+}
+.addButton {
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  width: 100%;
+  justify-content: center;
+  cursor: pointer;
+  margin: 0px 10px
+}
+
+.addButton span {
+  margin: 0px 10px
+}
+.Paper {
+  margin: 10px 0px
+}
+}

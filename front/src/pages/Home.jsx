@@ -1,4 +1,4 @@
-import { Button, Paper } from '@mui/material';
+import { Box, Button, Modal, Paper, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import './Home.css';
@@ -8,6 +8,19 @@ const Home = () => {
   const [doingItens, setDoingItens] = useState([]);
   const [doneItens, setDoneItens] = useState([])
   const [data, setData] = useState(null)
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
+
 
   useEffect(() => {
     if (data === null) {
@@ -94,44 +107,77 @@ const Home = () => {
       })
   }
 
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
-    <div className='home'>
-      <Paper className='Paper' elevation={3}>
-        <h2>A iniciar ({pendingItens.length})</h2>
-        <ul>
-          {pendingItens.map((item, index) => (
-            <li key={index}>
-              {item.title}
-              <Button onClick={() => moveToDoingItens(item)}>Move Right</Button>
-            </li>
-          ))}
-        </ul>
-      </Paper>
-      <Paper className='Paper' elevation={3}>
-        <h2>Em Andamento ({doingItens.length})</h2>
-        <ul>
-          {doingItens.map((item, index) => (
-            <li key={index}>
-              {item.title}
-              <Button onClick={() => returnToDoItens(item)}>Retornar</Button>
-              <Button onClick={() => moveToDoneItens(item)}>Avançar</Button>
-            </li>
-          ))}
-        </ul>
-      </Paper>
-      <Paper className='Paper' elevation={3}>
-        <h2>Concluidas ({doneItens.length})</h2>
-        <ul>
-          {doneItens.map((item, index) => (
-            <li key={index}>
-              {item.title}
-              <Button onClick={() => returnToDoingItens(item)}>Retornar</Button>
-            </li>
-          ))}
-        </ul>
-      </Paper>
-    </div>
+    <>
+      <Button
+        className='buttonAdd'
+        color='primary'
+        variant="outlined"
+        onClick={handleOpen}
+
+      >
+        Adicionar Task
+      </Button>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style} >
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Text in a modal
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+          </Typography>
+        </Box>
+      </Modal>`
+      <div className='home'>
+        <Paper className='Paper' elevation={3}>
+          <div className='headerPaper'>
+            <h2>
+              A iniciar ({pendingItens.length})
+            </h2>
+          </div>
+          <ul>
+            {pendingItens.map((item, index) => (
+              <li key={index}>
+                {item.title}
+                <Button onClick={() => moveToDoingItens(item)}>Move Right</Button>
+              </li>
+            ))}
+          </ul>
+        </Paper>
+        <Paper className='Paper' elevation={3}>
+          <h2>Em Andamento ({doingItens.length})</h2>
+          <ul>
+            {doingItens.map((item, index) => (
+              <li key={index}>
+                {item.title}
+                <Button onClick={() => returnToDoItens(item)}>Retornar</Button>
+                <Button onClick={() => moveToDoneItens(item)}>Avançar</Button>
+              </li>
+            ))}
+          </ul>
+        </Paper>
+        <Paper className='Paper' elevation={3}>
+          <h2>Concluidas ({doneItens.length})</h2>
+          <ul>
+            {doneItens.map((item, index) => (
+              <li key={index}>
+                {item.title}
+                <Button onClick={() => returnToDoingItens(item)}>Retornar</Button>
+              </li>
+            ))}
+          </ul>
+        </Paper>
+      </div>
+    </>
   );
 };
 

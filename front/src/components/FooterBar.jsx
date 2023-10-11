@@ -1,10 +1,14 @@
+import './FooterBar.css'
+
 
 const FooterBar = () => {
   return (
     <>
-      <span>
-        Aqui ficará o footer
-      </span>
+      <div className='footer'>
+        <p>
+          Aqui ficará o footer
+        </p>
+      </div>
     </>
   )
 
