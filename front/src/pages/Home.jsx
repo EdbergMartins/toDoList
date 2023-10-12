@@ -1,7 +1,8 @@
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { LoadingButton } from '@mui/lab';
-import { Box, Button, Modal, Paper, TextField } from '@mui/material';
+import { Box, Modal, Paper, TextField } from '@mui/material';
 import axios from 'axios';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
@@ -13,11 +14,15 @@ const Home = () => {
   const [doingItens, setDoingItens] = useState([]);
   const [doneItens, setDoneItens] = useState([])
   const [data, setData] = useState(null)
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [openModalCreateTask, setOpenModalCreateTask] = useState(false);
+  const handleOpen = () => setOpenModalCreateTask(true);
+  const handleClose = () => {
+    setOpenModalCreateTask(false);
+    setOpenModalViwerTask(false)
+  }
   const [loadingButton, setLoadingButton] = useState(false)
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [openModalViwerTask, setOpenModalViwerTask] = useState(false);
+  const [taskModal, setTaskModal] = useState({})
 
   const style = {
     position: 'absolute',
@@ -30,28 +35,40 @@ const Home = () => {
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
+    'overflow': 'scroll'
   };
-
-  const handleResize = () => {
-    // Aquí puedes realizar acciones cuando la pantalla cambie de tamaño
-    setScreenWidth(window.innerWidth)
-  }
-  window.addEventListener('resize', handleResize);
-
 
   const validationSchema = Yup.object({
     title: Yup.string().required('O titulo é obrigatória'),
   });
 
-  const sendForm = (from) => {
-    axios.post('http://localhost:3333/tasks', from)
+  const sendTask = (form) => {
+    console.log(form)
+    setLoadingButton(true)
+    console.log(form)
+    axios.post('http://localhost:3333/tasks', form)
       .then((response) => {
-        setPendingItens([...pendingItens, from]);
+        setPendingItens([...pendingItens, response.data.itemCreated[0]]);
         handleClose()
         setLoadingButton(false)
       })
       .catch((error) => {
         console.error('Erro:', error);
+        setLoadingButton(false)
+      })
+  }
+
+  const deletTask = (task) => {
+    setLoadingButton(true)
+    axios.delete('http://localhost:3333/tasks', { data: task })
+      .then((response) => {
+        setDoneItens(doneItens.filter((i) => i !== task));
+        handleClose()
+        setLoadingButton(false)
+      })
+      .catch((error) => {
+        console.error('Erro:', error);
+        setLoadingButton(false)
       })
   }
 
@@ -89,70 +106,99 @@ const Home = () => {
     }
   }, [data]);
 
-  const moveToDoingItens = (item) => {
+  const handleMoveToDoingItens = (item) => {
+    setLoadingButton(true)
     const newItem = item
     newItem.status = 'Em Andamento'
     axios.patch('http://localhost:3333/tasks', newItem)
       .then((response) => {
         setPendingItens(pendingItens.filter((i) => i !== item));
         setDoingItens([...doingItens, item]);
+        setLoadingButton(false)
       })
       .catch((error) => {
         console.error('Erro:', error);
+        setLoadingButton(false)
       })
   };
 
-  const returnToDoItens = (item) => {
+  const handleReturnToDoItens = (item) => {
+    setLoadingButton(true)
     const newItem = item
     newItem.status = 'Pendente'
     axios.patch('http://localhost:3333/tasks', newItem)
       .then((response) => {
         setDoingItens(doingItens.filter((i) => i !== item));
         setPendingItens([...pendingItens, item]);
+        setLoadingButton(false)
       })
       .catch((error) => {
         console.error('Erro:', error);
+        setLoadingButton(false)
       })
   };
 
-  const moveToDoneItens = (item) => {
+  const handleMoveToDoneItens = (item) => {
+    setLoadingButton(true)
     const newItem = item
     newItem.status = 'Concluída'
     axios.patch('http://localhost:3333/tasks', newItem)
       .then((response) => {
         setDoingItens(doingItens.filter((i) => i !== item))
         setDoneItens([...doneItens, item]);
+        setLoadingButton(false)
       })
       .catch((error) => {
         console.error('Erro:', error);
+        setLoadingButton(false)
       })
   }
 
-  const returnToDoingItens = (item) => {
+  const handleReturnToDoingItens = (item) => {
+    setLoadingButton(true)
     const newItem = item
     newItem.status = 'Em Andamento'
     axios.patch('http://localhost:3333/tasks', newItem)
       .then((response) => {
         setDoneItens(doneItens.filter((i) => i !== item))
         setDoingItens([...doingItens, item])
+        setLoadingButton(false)
       })
       .catch((error) => {
         console.error('Erro:', error);
+        setLoadingButton(false)
       })
+  }
+
+  const handleOpenModalViwerTask = (task) => {
+    setOpenModalViwerTask(true)
+    setTaskModal(task)
+  }
+
+  const handleData = (date) => {
+    const data = new Date(date)
+    const dia = data.getDate();
+    const mes = data.getMonth() + 1; // Os meses começam em 0 (janeiro é 0)
+    const ano = data.getFullYear();
+    const horas = data.getHours();
+    const minutos = data.getMinutes();
+    const segundos = data.getSeconds();
+    return `${horas}:${minutos}:${segundos} ${dia}/${mes}/${ano} `;
   }
 
   return (
     <>
-      <Button
-        style={screenWidth > 859 ? { margin: '10px' } : { margin: '30px' }}
+      <LoadingButton
+        style={{ 'margin-left': '20px' }}
+        loading={loadingButton}
         color='primary'
         variant="contained"
         onClick={handleOpen}
       >
         Adicionar Task
-      </Button>
+      </LoadingButton >
       <Modal
-        open={open}
+        open={openModalCreateTask}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -163,20 +209,20 @@ const Home = () => {
             validationSchema={validationSchema}
             onSubmit={(values) => {
               setLoadingButton(true)
-              sendForm(values)
+              sendTask(values)
             }}
           >
             {formik => (
               <Form style={{ display: 'flex', flexDirection: 'column' }}>
                 <Field style={{ margin: '10px' }} type="text" name="title" label="Titulo" as={TextField} />
                 <ErrorMessage style={{ 'margin-left': '10px', 'color': 'red' }} name="title" component="div" />
-                <TextField
+                <Field
                   style={{ margin: '10px' }}
                   type="text"
-                  id="outlined-textarea"
                   name="description"
                   label="Description"
                   placeholder="Descrição"
+                  as={TextField}
                   multiline
                 />
                 <LoadingButton style={{ margin: '10px' }} loading={loadingButton} type="submit" variant="contained" color="primary">Criar Task</LoadingButton>
@@ -186,6 +232,26 @@ const Home = () => {
           </Formik>  
         </Box>
       </Modal>
+      <Modal
+        open={openModalViwerTask}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <div>
+            <h2>Titulo</h2>
+            <p>{taskModal.title}</p>
+            <h3>Descrição</h3>
+            <p>{taskModal.descrition != null ? taskModal.description : 'Sem descrição cadastrada'}</p>
+            <dvi style={{ display: 'flex', 'flex-direction': 'row' }}>
+              <h4>Data da criação: </h4>
+              <span>{handleData(taskModal.created_at)}</span>
+            </dvi>
+          </div>
+        </Box>
+      </Modal>
+
       <div className='home'>
         <Paper className='Paper' elevation={3}>
           <div className='headerPaper'>
@@ -197,10 +263,10 @@ const Home = () => {
             {pendingItens.map((item, index) => (
               <li key={index}>
                 <div className='listPapers'>
-                  <span className='textTitle'>
+                  <span className='textTitle' onClick={() => handleOpenModalViwerTask(item)} >
                     {item.title}
                   </span>
-                  <Button onClick={() => moveToDoingItens(item)}><ArrowCircleRightOutlinedIcon /></Button>
+                  <LoadingButton loading={loadingButton} onClick={() => handleMoveToDoingItens(item)}><ArrowCircleRightOutlinedIcon /></LoadingButton>
                 </div>
               </li>
             ))}
@@ -212,10 +278,12 @@ const Home = () => {
             {doingItens.map((item, index) => (
               <li key={index}>
                 <div className='listPapers'>
-                  {item.title}
+                  <span onClick={() => handleOpenModalViwerTask(item)} className='textTitle'>
+                    {item.title}
+                  </span>
                   <div>
-                    <Button style={{ width: '5px' }} onClick={() => returnToDoItens(item)}><ArrowCircleLeftOutlinedIcon /></Button>
-                    <Button onClick={() => moveToDoneItens(item)}><ArrowCircleRightOutlinedIcon /></Button>
+                    <LoadingButton loading={loadingButton} style={{ width: '5px' }} onClick={() => handleReturnToDoItens(item)}><ArrowCircleLeftOutlinedIcon /></LoadingButton>
+                    <LoadingButton loading={loadingButton} onClick={() => handleMoveToDoneItens(item)}><ArrowCircleRightOutlinedIcon /></LoadingButton>
                   </div>
                 </div>
               </li>
@@ -228,10 +296,13 @@ const Home = () => {
             {doneItens.map((item, index) => (
               <li key={index}>
                 <div className='listPapers'>
-                  <span className='textTitle'>
+                  <span onClick={() => handleOpenModalViwerTask(item)} className='textTitle'>
                     {item.title}
                   </span>
-                  <Button onClick={() => returnToDoingItens(item)}><ArrowCircleLeftOutlinedIcon /></Button>
+                  <LoadingButton loading={loadingButton} onClick={() => handleReturnToDoingItens(item)}><ArrowCircleLeftOutlinedIcon /></LoadingButton>
+                  <LoadingButton loading={loadingButton} onClick={() => deletTask(item)}>
+                    <RemoveCircleOutlineIcon />
+                  </LoadingButton>
                 </div>
               </li>
             ))}

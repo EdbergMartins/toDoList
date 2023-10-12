@@ -1,4 +1,5 @@
-import './FooterBar.css'
+import GitHubIcon from '@mui/icons-material/GitHub';
+import './FooterBar.css';
 
 
 const FooterBar = () => {
@@ -6,8 +7,11 @@ const FooterBar = () => {
     <>
       <div className='footer'>
         <p>
-          Aqui ficará o footer
+          Projeto voltado para pratica de desenvolvimento fullstack 
         </p>
+        <a style={{ color: 'black' }} href="https://github.com/EdbergMartins" target="_blank" rel="noreferrer">
+          <GitHubIcon />
+        </a>
       </div>
     </>
   )

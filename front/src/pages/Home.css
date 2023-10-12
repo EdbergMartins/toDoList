@@ -2,25 +2,42 @@
 display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding: 20px
 }
 
 li {
   list-style-type: none;
 }
 
+ul {
+  padding: 0;
+
+}
 .listPapers {
+  margin: 5px;
   display: flex;
   justify-content: space-between;
   white-space: nowrap;
+  padding-left: 5px;
 }
 
+
 .textTitle {
-  width: 150px;
+  width: 100%;
   overflow: hidden;
+  align-self: center;
+    border-radius: 5px;
+    border: 1px solid black;
+    padding: 5px
+  }
+  
+  .textTitle:hover {
+    background-color: #4487ca;
+    cursor: pointer;
 }
 .Paper {
-  width: 90%;
-  margin: 0px 10px
+  width: 100%;
+    margin-right: 10px
 }
 
 .Paper h2 {
@@ -66,4 +83,13 @@ li {
 .textTitle {
   width: 100%;
 }
+.listPapers {
+  max-width: 97%;
+}
+}
+
+@media (max-width: 640px) {
+  .listPapers {
+    max-width: 96%;
+  }
 }

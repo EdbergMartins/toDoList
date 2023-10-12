@@ -3,12 +3,10 @@ import './NavBar.css'
 
 const NavBar = () => {
   return (
-    <nav >
-      <ul className='navBar'>
-        <li>Home</li>
-        <li>Sair</li>
-      </ul>
-    </nav>
+    <div className='navBar'>
+      <h1>To Do List</h1>
+    </div>
+
   )
 }
 
