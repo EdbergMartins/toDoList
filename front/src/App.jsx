@@ -8,7 +8,7 @@ import Home from './pages/Home';
 
 function App() {
   return (
-    <div className=''>
+    <div>
       <NavBar />
       <Box style={{ 'height': '100%', 'min-height': '700px', 'scroll': 'scrolla' }} >
       <BrowserRouter>

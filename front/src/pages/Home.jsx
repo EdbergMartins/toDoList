@@ -244,9 +244,9 @@ const Home = () => {
             <p>{taskModal.title}</p>
             <h3>Descrição</h3>
             <p>{taskModal.descrition != null ? taskModal.description : 'Sem descrição cadastrada'}</p>
-            <dvi style={{ display: 'flex', 'flex-direction': 'row' }}>
-              <h4>Data da criação: </h4>
-              <span>{handleData(taskModal.created_at)}</span>
+            <dvi style={{ display: 'flex', 'flex-direction': 'row', 'align-items': 'center' }}>
+              <h4>Data da criação:</h4>
+              <span style={{ 'margin': '0 0 0 5px' }}>{handleData(taskModal.created_at)}</span>
             </dvi>
           </div>
         </Box>
