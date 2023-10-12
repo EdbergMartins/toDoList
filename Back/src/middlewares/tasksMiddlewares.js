@@ -15,7 +15,7 @@ const validateBody = (rec, res, next) => {
 const validateDelite = async (rec, res, next) => {
   const { body } = rec;
   const [allTasks] = await tasaksModule.getAll();
-  
+  console.log(body)
   if (body.id === undefined) {
     return res.status(400).json({ message: 'The field id can not by undefined' });
   }

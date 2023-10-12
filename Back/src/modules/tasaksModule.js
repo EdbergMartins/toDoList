@@ -6,10 +6,10 @@ const getAll = async () => {
 } 
 
 const createTask = async (task) => {
-  const { title } = task;
-  const createdDateUtc = new Date(Date.now()).toUTCString()
-  const query = 'INSERT INTO  tasks(title,status,created_at) VALUES(?,?,?)';
-  const [createTask] = await connection.execute(query, [title, 'Pendente', createdDateUtc]);
+  const { title, description } = task;
+  const createdDateUtc = new Date(Date.now())
+  const query = 'INSERT INTO  tasks(title,status,description,created_at) VALUES(?,?,?,?)';
+  const [createTask] = await connection.execute(query, [title, 'Pendente', description, createdDateUtc]);
   const [itemCreated] = await connection.execute('SELECT * FROM tasks ORDER BY id DESC LIMIT 1;')
   return { itemCreated };
 }
