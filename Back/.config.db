@@ -2,10 +2,17 @@ CREATE DATABASE IF NOT EXISTS todolist;
 
 USE todolist;
 
-CREATE TABLE tasks (
+CREATE TABLE EXISTS tasks (
     id INT PRIMARY Key AUTO_INCREMENT,
     title VARCHAR(45) NOT NULL,
     status VARCHAR(45) NOT NULL,
     created_at TIMESTAMP,
     description TEXT
+);
+
+CREATE TABLE EXISTS users (
+    id INT AUTO_INCREMENT,
+    email VARCHAR(45) NOT NULL PRIMARY Key,
+    password VARCHAR(45) NOT NULL,
+    created_at TIMESTAMP,
 );
