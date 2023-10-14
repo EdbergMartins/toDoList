@@ -3,8 +3,5 @@ background-color: #4487ca;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  list-style-type: none;
-  padding: 20px;
-    margin: 0 0 10px;
-    justify-content: center
+  justify-content: center
 }

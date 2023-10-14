@@ -10,7 +10,9 @@ function App() {
   return (
     <div>
       <NavBar />
-      <Box style={{ 'height': '100%', 'min-height': '700px', 'scroll': 'scrolla' }} >
+      <Box style={{
+        'height': '100%', 'min-height': '690px', 'scroll': 'scrolla', 'padding-top': '10px'
+      }} >
       <BrowserRouter>
         <Routes>
           <Route index element={<Home />} />

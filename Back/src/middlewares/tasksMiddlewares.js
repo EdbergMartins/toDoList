@@ -22,15 +22,12 @@ const validateDelite = async (rec, res, next) => {
   if (body.id === '') {
     return res.status(400).json({ message: 'The field id can not by empty' });
   }
-
   let taskFound = false;
-
   allTasks.forEach(e => {
     if (e.id == body.id) {
       taskFound = true;
     }
   });
-
   if (taskFound) {
     next();
   } else {
