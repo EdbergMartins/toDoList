@@ -2,18 +2,19 @@ CREATE DATABASE IF NOT EXISTS todolist;
 
 USE todolist;
 
-CREATE TABLE EXISTS tasks (
+CREATE TABLE IF NOT EXISTS tasks (
     id INT PRIMARY Key AUTO_INCREMENT,
     title VARCHAR(45) NOT NULL,
     status VARCHAR(45) NOT NULL,
     created_at TIMESTAMP,
-    description TEXT
+    description TEXT,
+    usuario_id INT, -- Declare a foreign key column
     FOREIGN KEY (usuario_id) REFERENCES users(id)
 );
 
-CREATE TABLE EXISTS users (
-    id INT AUTO_INCREMENT,
-    email VARCHAR(45) NOT NULL PRIMARY Key,
-    password VARCHAR(45) NOT NULL,
-    created_at TIMESTAMP,
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(45) NOT NULL ,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP
 );

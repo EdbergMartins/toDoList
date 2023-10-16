@@ -1,21 +1,20 @@
 const tasksModule = require('../modules/tasaksModule');
 
 
-const getAll = async (_rec, res) => {
-  
-  const tasks = await tasksModule.getAll();
-
+const getAll = async (rec, res) => {
+  const id = rec.params.id;
+  const tasks = await tasksModule.getAll(id);
   return res.status('200').json(tasks[0])
-
 }
 
 const createTask = async (rec, res) => {
-  const createdTasks = await tasksModule.createTask(rec.body);
+  const createdTasks = await tasksModule.createTask(rec);
   return res.status('201').json(createdTasks)
 }
 
 const deleteTask = async (rec, res) => {
-  const deleteTask = await tasksModule.deleteTask(rec.body);
+  const id = rec.params.id
+  const deleteTask = await tasksModule.deleteTask(id);
   return res.status('200').json({menssage: 'Task deleted succefully'})
 }
 

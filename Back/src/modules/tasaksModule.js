@@ -1,22 +1,22 @@
 const connection = require('./conections')
 
-const getAll = async () => {
-  const tasks = await connection.execute('SELECT * FROM tasks');
+const getAll = async (id) => {
+  const tasks = await connection.execute(`SELECT * FROM tasks WHERE usuario_id=${id}`);
   return tasks
 } 
 
 const createTask = async (task) => {
-  const { title, description } = task;
+  const { title, description, id: usuario_id } = task.body;
   const createdDateUtc = new Date(Date.now())
-  const query = 'INSERT INTO  tasks(title,status,description,created_at) VALUES(?,?,?,?)';
-  const [createTask] = await connection.execute(query, [title, 'Pendente', description, createdDateUtc]);
-  const [itemCreated] = await connection.execute('SELECT * FROM tasks ORDER BY id DESC LIMIT 1;')
+  const query = 'INSERT INTO tasks(title,status,description,usuario_id,created_at) VALUES(?,?,?,?,?)';
+  console.log(description)
+  const [createTask] = await connection.execute(query, [title, 'Pendente', description, usuario_id, createdDateUtc]);
+  const [itemCreated] = await connection.execute(`SELECT * FROM tasks WHERE usuario_id=${usuario_id} ORDER BY id DESC LIMIT 1;`)
   return { itemCreated };
 }
 
-const deleteTask = async (task) => {
-  const { id } = task;
-  const query = await connection.execute(`DELETE FROM tasks WHERE id =${id}`);
+const deleteTask = async (id) => {
+  const query = await connection.execute(`DELETE FROM tasks WHERE id=${id}`);
   return;
 }
 

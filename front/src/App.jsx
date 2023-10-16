@@ -5,23 +5,28 @@ import './App.css';
 import FooterBar from './components/FooterBar';
 import NavBar from './components/NavBar';
 import Home from './pages/Home';
+import Tasks from './pages/Tasks';
 
-function App() {
+const App = ({ user, token, isLoggedIn }) => {
+
   return (
     <div>
       <NavBar />
       <Box style={{
-        'height': '100%', 'min-height': '690px', 'scroll': 'scrolla', 'padding-top': '10px'
+        'height': '100%', minHeight: '690px', 'scroll': 'scrolla', paddingTop: '10px'
       }} >
-      <BrowserRouter>
-        <Routes>
-          <Route index element={<Home />} />
-        </Routes>
-      </BrowserRouter>
+        <BrowserRouter>
+          <Routes>
+            <Route index element={<Home />} />
+            <Route path="/tasks" element={<Tasks/>} />
+          </Routes>
+        </BrowserRouter>
       </Box>
       <FooterBar />
     </div>
   );
-}
+};
+
+
 
 export default App; 

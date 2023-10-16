@@ -1,10 +1,12 @@
-import React from 'react'
-import './NavBar.css'
+import React from 'react';
+
+import './NavBar.css';
 
 const NavBar = () => {
+
   return (
     <div className='navBar'>
-      <h1>To Do List</h1>
+      <h1 style={{ textAlign: 'center', 'width': '100%' }}>To Do List</h1>
     </div>
 
   )

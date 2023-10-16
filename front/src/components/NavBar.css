@@ -5,3 +5,7 @@ background-color: #4487ca;
   justify-content: space-between;
   justify-content: center
 }
+.exitButton {
+  color: black;
+  text-align: right
+}

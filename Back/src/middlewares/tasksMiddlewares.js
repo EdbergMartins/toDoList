@@ -1,4 +1,5 @@
 const tasaksModule = require('../modules/tasaksModule');
+const connection = require('../modules/conections')
 
 const validateBody = (rec, res, next) => {
 
@@ -13,28 +14,22 @@ const validateBody = (rec, res, next) => {
 }
 
 const validateDelite = async (rec, res, next) => {
-  const { body } = rec;
-  const [allTasks] = await tasaksModule.getAll();
-  console.log(body)
-  if (body.id === undefined) {
+  const id = rec.params.id;
+  const task = await connection.execute(`SELECT * FROM tasks WHERE id=${id}`);
+  if (id === undefined) {
     return res.status(400).json({ message: 'The field id can not by undefined' });
   }
-  if (body.id === '') {
+  if (id === '') {
     return res.status(400).json({ message: 'The field id can not by empty' });
   }
   let taskFound = false;
-  allTasks.forEach(e => {
-    if (e.id == body.id) {
-      taskFound = true;
-    }
-  });
-  if (taskFound) {
+  if (id) {
+    taskFound = true;
     next();
   } else {
     return res.status(400).json({ message: 'Task has not been found' });
   }
 }
-
 
 module.exports = {
   validateBody,

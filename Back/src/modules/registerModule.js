@@ -7,7 +7,6 @@ const hashPassword = async (password) => {
   try {
     const salt = await bcrypt.genSalt(parseFloat(process.env.HASH_CRYPTO));
     const hash = await bcrypt.hash(password, salt);
-    console.log('Register salt:', salt, 'Register hash: ', hash)
     return hash;
   } catch (error) {
     throw error;
