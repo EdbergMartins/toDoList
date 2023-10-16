@@ -8,6 +8,7 @@ CREATE TABLE EXISTS tasks (
     status VARCHAR(45) NOT NULL,
     created_at TIMESTAMP,
     description TEXT
+    FOREIGN KEY (usuario_id) REFERENCES users(id)
 );
 
 CREATE TABLE EXISTS users (
