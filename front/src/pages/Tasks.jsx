@@ -2,7 +2,7 @@ import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutl
 import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { LoadingButton } from '@mui/lab';
-import { Box, Modal, Paper, TextField } from '@mui/material';
+import { Alert, Box, Modal, Paper, Snackbar, TextField } from '@mui/material';
 import axios from 'axios';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
@@ -26,8 +26,10 @@ const Tasks = ({ loggedDate, updateLoggedData }) => {
   const [taskModal, setTaskModal] = useState({})
   const [loading, setLoading] = useState(true)
   const token = localStorage.getItem('token')
-  const email = localStorage.getItem('email')
+  const [openErrorModal, setOpenErrorModal] = useState(false)
+  const [openSucessModal, setOpenSucessModal] = useState(false)
   const id = localStorage.id
+  const apiLink = process.env.REACT_APP_API_URL;
   const history = useNavigate();
   useEffect(() => {
     !token ? history('/') : setLoading(false)
@@ -45,16 +47,25 @@ const Tasks = ({ loggedDate, updateLoggedData }) => {
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
-    'overflow': 'scroll'
+    'overflow': 'scroll',
+    zIndex: '999'
   };
 
   const validationSchema = Yup.object({
     title: Yup.string().required('O titulo é obrigatória'),
   });
 
+  const handleCloseErrorModal = () => {
+    setOpenErrorModal(false)
+  }
+
+  const handleCloseSucessModal = () => {
+    setOpenSucessModal(false)
+  }
+
   const sendTask = (form) => {
     form['id'] = id
-    axios.post('http://localhost:3333/tasks', form, {
+    axios.post(`${apiLink}/tasks`, form, {
       headers: {
         'Authorization': `${token} `,
       }
@@ -63,17 +74,19 @@ const Tasks = ({ loggedDate, updateLoggedData }) => {
         setPendingItens([...pendingItens, response.data.itemCreated[0]]);
         handleClose()
         setLoadingButton(false)
+        setOpenSucessModal(true)
       })
       .catch((error) => {
         console.error('Erro:', error);
         setLoadingButton(false)
+        setOpenErrorModal(true)
       })
   }
 
   const deletTask = (task) => {
     const { id } = task
     setLoadingButton(true)
-    axios.delete(`http://localhost:3333/tasks/${id}`, {
+    axios.delete(`${apiLink}/tasks/${id}`, {
       headers: {
         'Authorization': `${token} `,
       }
@@ -86,12 +99,13 @@ const Tasks = ({ loggedDate, updateLoggedData }) => {
       .catch((error) => {
         console.error('Erro:', error);
         setLoadingButton(false)
+        setOpenErrorModal(true)
       })
   }
 
   useEffect(() => {
     if (data === null) {
-      axios.get(`http://localhost:3333/tasks/${id}`, {
+      axios.get(`${apiLink}/tasks/${id}`, {
         headers: {
           'Authorization': `${token} `,
         },
@@ -122,6 +136,7 @@ const Tasks = ({ loggedDate, updateLoggedData }) => {
         })
         .catch((error) => {
           console.error('Erro:', error);
+          setOpenErrorModal(true)
         });
     }
   }, [data]);
@@ -130,7 +145,7 @@ const Tasks = ({ loggedDate, updateLoggedData }) => {
     setLoadingButton(true)
     const newItem = item
     newItem.status = 'Em Andamento'
-    axios.patch('http://localhost:3333/tasks', newItem, {
+    axios.patch(`${apiLink}/tasks`, newItem, {
       headers: {
         'Authorization': `${token} `,
       }
@@ -143,6 +158,7 @@ const Tasks = ({ loggedDate, updateLoggedData }) => {
       .catch((error) => {
         console.error('Erro:', error);
         setLoadingButton(false)
+        setOpenErrorModal(true)
       })
   };
 
@@ -150,7 +166,7 @@ const Tasks = ({ loggedDate, updateLoggedData }) => {
     setLoadingButton(true)
     const newItem = item
     newItem.status = 'Pendente'
-    axios.patch('http://localhost:3333/tasks', newItem, {
+    axios.patch(`${apiLink}/tasks`, newItem, {
       headers: {
         'Authorization': `${token} `,
       }
@@ -163,6 +179,7 @@ const Tasks = ({ loggedDate, updateLoggedData }) => {
       .catch((error) => {
         console.error('Erro:', error);
         setLoadingButton(false)
+        setOpenErrorModal(true)
       })
   };
 
@@ -170,7 +187,7 @@ const Tasks = ({ loggedDate, updateLoggedData }) => {
     setLoadingButton(true)
     const newItem = item
     newItem.status = 'Concluída'
-    axios.patch('http://localhost:3333/tasks', newItem, {
+    axios.patch(`${apiLink}/tasks`, newItem, {
       headers: {
         'Authorization': `${token} `,
       }
@@ -183,6 +200,7 @@ const Tasks = ({ loggedDate, updateLoggedData }) => {
       .catch((error) => {
         console.error('Erro:', error);
         setLoadingButton(false)
+        setOpenErrorModal(true)
       })
   }
 
@@ -190,7 +208,7 @@ const Tasks = ({ loggedDate, updateLoggedData }) => {
     setLoadingButton(true)
     const newItem = item
     newItem.status = 'Em Andamento'
-    axios.patch('http://localhost:3333/tasks', newItem, {
+    axios.patch(`${apiLink}/tasks`, newItem, {
       headers: {
         'Authorization': `${token} `,
       }
@@ -203,6 +221,7 @@ const Tasks = ({ loggedDate, updateLoggedData }) => {
       .catch((error) => {
         console.error('Erro:', error);
         setLoadingButton(false)
+        setOpenErrorModal(true)
       })
   }
 
@@ -230,6 +249,16 @@ const Tasks = ({ loggedDate, updateLoggedData }) => {
 
     loading ? <> </> :
       <>
+        <Snackbar open={openErrorModal} autoHideDuration={1000} onClose={handleCloseErrorModal} >
+          <Alert onClose={handleCloseErrorModal} severity="error" sx={{ width: '100%' }}>
+            Erro ao executar a ação.
+          </Alert>
+        </Snackbar>
+        <Snackbar open={openSucessModal} autoHideDuration={1000} onClose={handleCloseSucessModal} >
+          <Alert onClose={handleCloseSucessModal} severity="success" sx={{ width: '100%' }}>
+            Ação executada com seucesso.
+          </Alert>
+        </Snackbar>
         <div style={{ 'display': 'flex', 'justify-content': 'space-between' }}>
           <LoadingButton
             style={{ 'margin-left': '20px' }}
