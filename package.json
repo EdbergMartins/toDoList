@@ -1,11 +1,11 @@
 {
   "name": "back",
   "version": "1.0.0",
-  "description": "Project to make site form Luis Cunha",
+  "description": "Projeto para demonstrar habilidades full stack utilizando as tecnologias: Reação de front-end Back-end Node.js",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/server.js",
+    "start": "npm install && node src/server.js",
     "dev": "nodemon src/server.js"
   },
   "author": "",
