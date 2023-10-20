@@ -6,7 +6,8 @@ module.exports = {
     "database": process.env.MYSQL_DB,
     "host": process.env.MYSQL_HOST,
     "port": process.env.PORT,
-    "loggin": true
+    "dialect": process.env.DB_DIALECT,
+    "logging": true
   },
   "test": {
     "username": process.env.MYSQL_USER,
@@ -14,7 +15,8 @@ module.exports = {
     "database": process.env.MYSQL_DB,
     "host": process.env.MYSQL_HOST,
     "port": process.env.PORT,
-    "loggin": true
+    "dialect": process.env.DB_DIALECT,
+    "logging": true
   },
   "prod": {
     "username": process.env.MYSQL_USER,
@@ -22,6 +24,7 @@ module.exports = {
     "database": process.env.MYSQL_DB,
     "host": process.env.MYSQL_HOST,
     "port": process.env.PORT,
-    "loggin": false
+    "dialect": process.env.DB_DIALECT,
+    "logging": false
   }
 }
