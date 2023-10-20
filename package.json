@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm install && node src/server.js",
+    "start": "npm install && sequelize-cli db:migrate && node src/server.js",
     "dev": "nodemon src/server.js"
   },
   "author": "",
@@ -22,7 +22,8 @@
     "mysql2": "^3.6.1",
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.33.0"
+    "sequelize": "^6.33.0",
+    "sequelize-cli": "^6.6.1"
   },
   "devDependencies": {
     "eslint": "^8.50.0",
