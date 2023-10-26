@@ -12,6 +12,7 @@ router.get('/tasks/:id', [loginValidateMiddlewares.verificaToken], tasksControle
 router.post('/tasks', [loginValidateMiddlewares.verificaToken, tasksMiddleware.validateBody], tasksControler.createTask)
 router.delete('/tasks/:id', [loginValidateMiddlewares.verificaToken, tasksMiddleware.validateDelite], tasksControler.deleteTask)
 router.patch('/tasks', loginValidateMiddlewares.verificaToken, tasksControler.atualizeStatusTask)
+router.post('/tasks/:description/:id', tasksControler.atualizeDescritionTask)
 router.get('/register', registerController.getUsers)
 router.post('/register', registerController.registerUser)
 router.post('/login', singInUsersController.singInUsers)

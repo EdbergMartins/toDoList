@@ -25,9 +25,14 @@ const atualizeStatusTask = async (task) => {
   const query = await connection.execute(`UPDATE tasks SET status = "${status}" WHERE id = ${id};`)
 }
 
+const atualizeDescritionTask = async (id, description) => {
+  const query = await connection.execute(`UPDATE tasks SET description = "${description}" WHERE id = ${id};`)
+}
+
 module.exports = {
   getAll,
   createTask,
   deleteTask,
-  atualizeStatusTask
+  atualizeStatusTask,
+  atualizeDescritionTask
 }

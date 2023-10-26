@@ -23,9 +23,17 @@ const atualizeStatusTask = async (rec, res) => {
   return res.status('200').json({ message: 'Task ataulized' });
 }
 
+const atualizeDescritionTask = async (rec, res) => {
+  const description = rec.params.description
+  const id = rec.params.id
+  const atualizeDescritionTask = await tasksModule.atualizeDescritionTask(id, description);
+  return res.status('200').json({ message: 'Task description ataulized' });
+}
+
 module.exports = {
   getAll,
   createTask,
   deleteTask,
-  atualizeStatusTask
+  atualizeStatusTask,
+  atualizeDescritionTask
 }
