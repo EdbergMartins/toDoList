@@ -9,16 +9,16 @@ Antes de começar a usar o backend, você precisa configurar o ambiente e as dep
 
 1. Certifique-se de que o Node.js esteja instalado no seu sistema. Você pode baixá-lo em [nodejs.org](https://nodejs.org/).
 
-2. Clone este repositório para o seu computador.
+2. Clone este repositório.
 
-    git clone https://github.com/EdbergMartins/toDoListFrontEnd.git
+    '''git clone https://github.com/EdbergMartins/toDoListFrontEnd.git'''
 
 3. Navegue até o diretório do projeto.
 
 
 4. Instale as dependências usando o npm.
 
-    npm install
+    '''npm install'''
     
 
 5. Crie um arquivo `.env` na raiz do projeto e siga o modelo no arquivo `.env.example` para definir as variáveis de ambiente necessárias.
